@@ -27,7 +27,7 @@ module Network.Discord.Rest
     -- | Obtains a new gateway to connect to.
     getGateway :: DiscordRest m => m URL
     getGateway = do
-      r <- R.req R.GET (baseUrl R./: "gateway") R.NoReqBody R.jsonResponse mempty
+      r <- discordReq $ R.req R.GET (baseUrl R./: "gateway") R.NoReqBody R.jsonResponse mempty
       return . fromJust $ importURL =<< parseMaybe getURL (R.responseBody r)
       where
         getURL :: Value -> Parser String

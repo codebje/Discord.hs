@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds, OverloadedStrings, MultiParamTypeClasses #-}
 {-# LANGUAGE AllowAmbiguousTypes, FlexibleInstances, UndecidableInstances #-}
 {-# LANGUAGE FunctionalDependencies, KindSignatures #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 -- | Utility and base types and functions for the Discord Rest API
@@ -41,7 +42,10 @@ module Network.Discord.Rest.Prelude where
             infoM "Discord-hs.Rest" "Done waiting"
           return ()
 
-  instance (MonadIO m, DiscordRest m) => MonadHttp m where
+  newtype DiscordReq m a = DiscordReq { discordReq :: m a }
+    deriving (Functor, Applicative, Monad, MonadIO)
+
+  instance MonadIO m => MonadHttp (DiscordReq m) where
     handleHttpException = liftIO . throwIO
 
   -- | Class over which performing a data retrieval action is defined

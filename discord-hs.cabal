@@ -26,7 +26,7 @@ library
                      , Network.Discord.Framework
   other-modules:       Paths_discord_hs
   -- other-extensions:
-  build-depends:       base==4.*
+  build-depends:       base
                      , discord-types
                      , discord-rest
                      , discord-gateway

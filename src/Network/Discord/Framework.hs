@@ -74,10 +74,8 @@ module Network.Discord.Framework where
 
     connection = DiscordApp $ \c _ -> pure c
     feed m event = do
-      liftIO $ print "Running event handler"
       c <- connection
-      _ <- liftIO . runIO $ runEvent m c event
-      liftIO $ print "Returning from handler"
+      void . liftIO . runIO $ runEvent m c event
 
     run m conn =
       runIO $ (runEvent $ eventStream Create m) conn Nil
