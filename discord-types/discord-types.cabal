@@ -1,5 +1,5 @@
 name:                discord-types
-version:             0.2.2
+version:             0.5.0
 synopsis:            Type information for discord-hs
 description:         Type information for discord-hs
 homepage:            https://github.com/jano017/Discord.hs
