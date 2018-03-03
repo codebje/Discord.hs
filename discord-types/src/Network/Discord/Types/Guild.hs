@@ -35,8 +35,9 @@ module Network.Discord.Types.Guild where
         , guildEmbedChannel ::                !Snowflake -- ^ Id of embedded channel
         , guildVerification ::                !Integer   -- ^ Level of verification
         , guildNotification ::                !Integer   -- ^ Level of default notifications
-        , guildRoles        ::                [Role]     -- ^ Array of 'Role' objects
-        , guildEmojis       ::                [Emoji]    -- ^ Array of 'Emoji' objects
+        , guildRoles        ::                 [Role]    -- ^ Array of 'Role' objects
+        , guildEmojis       ::                 [Emoji]   -- ^ Array of 'Emoji' objects
+        , guildFeatures     ::                 [String]  -- ^ Array of guild features
         }
     | Unavailable 
         { guildId :: {-# UNPACK #-} !Snowflake
@@ -62,6 +63,30 @@ module Network.Discord.Types.Guild where
                 <*> o .:  "default_message_notifications"
                 <*> o .:  "roles"
                 <*> o .:  "emojis"
+                <*> o .:  "features"
+    parseJSON _          = mzero
+
+  -- | The guild information sent in a GUILD_CREATE event
+  data GuildCreated
+    = GuildCreated
+        { guildBase          :: {-# UNPACK #-} !Guild     -- ^ The regular guild data
+        , guildJoinedAt      ::                !UTCTime   -- ^ When this guild was joined - GUILD_CREATE only
+        , guildIsLarge       ::                !Bool      -- ^ Whether this is a large guild - GUILD_CREATE only
+        , guildIsUnavailable ::                !Bool      -- ^ Whether this guild is unavailable - GUILD_CREATE only
+        , guildMemberCount   ::                !Integer   -- ^ Total number of guild members - GUILD_CREATE only
+        , guildMembers       ::                ![Member]  -- ^ The members of the guild - GUILD_CREATE only
+        , guildChannels      ::                ![Channel] -- ^ The channels in the guild - GUILD_CREATE only
+        } deriving Show
+
+  instance FromJSON GuildCreated where
+    parseJSON ob@(Object o) = do
+      GuildCreated <$> parseJSON ob
+                   <*> o .: "joined_at"
+                   <*> o .: "large"
+                   <*> o .: "unavailable"
+                   <*> o .: "member_count"
+                   <*> o .: "members"
+                   <*> o .: "channels"
     parseJSON _          = mzero
 
   -- | Represents an emoticon (emoji)

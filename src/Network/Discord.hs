@@ -78,7 +78,7 @@ module Network.Discord
 
   instance (DiscordGate m, DiscordRest m) =>  EventMap GuildCreateEvent m where
     type Domain   GuildCreateEvent = Event
-    type Codomain GuildCreateEvent = Guild
+    type Codomain GuildCreateEvent = GuildCreated
 
     mapEvent _ (GuildCreate e) = return e
     mapEvent _ _ = mzero
