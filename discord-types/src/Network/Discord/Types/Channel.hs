@@ -50,7 +50,7 @@ module Network.Discord.Types.Channel where
         { channelId          :: Snowflake   -- ^ The id of the channel (Will be equal to
                                             --   the guild if it's the "general" channel).
         , channelGuild       :: Snowflake   -- ^ The id of the guild.
-        , channelName        :: String      -- ^ The name of the guild (2 - 1000 characters).
+        , channelName        :: String      -- ^ The name of the channel (2 - 1000 characters).
         , channelPosition    :: Integer     -- ^ The storing position of the channel.
         , channelPermissions :: [Overwrite] -- ^ An array of permission 'Overwrite's
         , channelTopic       :: String      -- ^ The topic of the channel. (0 - 1024 chars).
@@ -73,6 +73,16 @@ module Network.Discord.Types.Channel where
         { channelId          :: Snowflake
         , channelRecipients  :: [User]    -- ^ The 'User' object(s) of the DM recipient(s).
         , channelLastMessage :: Snowflake
+        }
+    -- | Group DM channels represent a multi-way conversation between two or more users
+    -- | Channel Categories represent a grouping of channels
+    | GroupMessage
+        { channelId          :: Snowflake
+        }
+    | Category
+        { channelId :: Snowflake
+        , channelPermissions :: [Overwrite] -- ^ An array of permission 'Overwrite's
+        , channelName        :: String      -- ^ The name of the channel (2 - 1000 characters).
         } deriving (Show, Eq)
 
   instance FromJSON Channel where
@@ -99,6 +109,12 @@ module Network.Discord.Types.Channel where
                   <*> o .: "permission_overwrites"
                   <*> o .: "bitrate"
                   <*> o .: "user_limit"
+        3 ->
+            GroupMessage <$> o .: "id"
+        4 ->
+            Category <$> o .:  "id"
+                     <*> o .:  "permission_overwrites"
+                     <*> o .:  "name"
         _ -> mzero
 
   -- | Permission overwrites for a channel.
