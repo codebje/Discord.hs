@@ -11,12 +11,19 @@ module Network.Discord.Types.Guild where
   import Network.Discord.Types.Prelude
 
   -- |Representation of a guild member.
-  data Member = GuildMember {-# UNPACK #-} !Snowflake User
-            | MemberShort User (Maybe String) ![Snowflake]
-            deriving Show
+  data Member
+    = GuildMember 
+        { guildMemberUser   :: User
+        , guildMemberNick   :: Maybe String
+        , guildMemberRoles  :: ![Snowflake]
+        , guildMemberJoinedAt :: UTCTime
+        } deriving Show
   instance FromJSON Member where
     parseJSON (Object o) =
-      GuildMember <$> o .: "guild_id" <*> o .: "user"
+      GuildMember <$> o .:  "user"
+                  <*> o .:? "nick"
+                  <*> o .:  "roles"
+                  <*> o .:  "joined_at"
     parseJSON _ = mzero
 
   -- | Guilds in Discord represent a collection of users and channels into an isolated
