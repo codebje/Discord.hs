@@ -91,7 +91,7 @@ module Network.Discord.Types.Channel where
       case type' of
         0 ->
             Text  <$> o .:  "id"
-                  <*> o .:  "guild_id"
+                  <*> o .:? "guild_id" .!= 0
                   <*> o .:  "name"
                   <*> o .:  "position"
                   <*> o .:  "permission_overwrites"

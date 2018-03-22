@@ -13,17 +13,17 @@ module Network.Discord.Types.Guild where
   -- |Representation of a guild member.
   data Member
     = GuildMember 
-        { guildMemberUser   :: User
-        , guildMemberNick   :: Maybe String
-        , guildMemberRoles  :: ![Snowflake]
-        , guildMemberJoinedAt :: UTCTime
+        { memberUser  :: User
+        , memberNick  :: Maybe String
+        , memberRoles :: ![Snowflake]
+        , memberGuild :: Snowflake
         } deriving Show
   instance FromJSON Member where
     parseJSON (Object o) =
       GuildMember <$> o .:  "user"
                   <*> o .:? "nick"
                   <*> o .:  "roles"
-                  <*> o .:  "joined_at"
+                  <*> o .:? "guild_id" .!= 0
     parseJSON _ = mzero
 
   -- | Guilds in Discord represent a collection of users and channels into an isolated

@@ -105,6 +105,7 @@ module Network.Discord.Gateway where
     liftIO $ putStrLn "Waiting for data"
     msg' <- liftIO $ receiveData conn
     liftIO $ putStrLn "Got data"
+    liftIO $ print msg'
     case eitherDecode msg' of
       Right msg -> return msg
       Left  err -> 
