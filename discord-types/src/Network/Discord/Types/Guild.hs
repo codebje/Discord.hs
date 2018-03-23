@@ -26,11 +26,23 @@ module Network.Discord.Types.Guild where
                   <*> o .:? "guild_id" .!= 0
     parseJSON _ = mzero
 
+  -- | A chunk of guild member data
+  data MemberChunk
+    = MemberChunk
+        { chunkGuildId      :: {-# UNPACK #-} !Snowflake -- ^ Guild id
+        , chunkGuildMembers ::                ![Member]  -- ^ The members of the guild
+        } deriving Show
+  instance FromJSON MemberChunk where
+    parseJSON (Object o) =
+      MemberChunk <$> o .: "guild_id"
+                  <*> o .: "members"
+    parseJSON _ = mzero
+
   -- | Guilds in Discord represent a collection of users and channels into an isolated
   --   "Server"
   data Guild
     = Guild 
-        { guildId           :: {-# UNPACK #-} !Snowflake -- ^ Gulid id
+        { guildId           :: {-# UNPACK #-} !Snowflake -- ^ Guild id
         , guildName         ::                 String    -- ^ Guild name (2 - 100 chars)
         , guildIcon         ::                 String    -- ^ Icon hash
         , guildSplash       ::                 String    -- ^ Splash hash
@@ -76,13 +88,13 @@ module Network.Discord.Types.Guild where
   -- | The guild information sent in a GUILD_CREATE event
   data GuildCreated
     = GuildCreated
-        { guildBase          :: {-# UNPACK #-} !Guild     -- ^ The regular guild data
-        , guildJoinedAt      ::                !UTCTime   -- ^ When this guild was joined - GUILD_CREATE only
-        , guildIsLarge       ::                !Bool      -- ^ Whether this is a large guild - GUILD_CREATE only
-        , guildIsUnavailable ::                !Bool      -- ^ Whether this guild is unavailable - GUILD_CREATE only
-        , guildMemberCount   ::                !Integer   -- ^ Total number of guild members - GUILD_CREATE only
-        , guildMembers       ::                ![Member]  -- ^ The members of the guild - GUILD_CREATE only
-        , guildChannels      ::                ![Channel] -- ^ The channels in the guild - GUILD_CREATE only
+        { guildBase          :: !Guild     -- ^ The regular guild data
+        , guildJoinedAt      :: !UTCTime   -- ^ When this guild was joined - GUILD_CREATE only
+        , guildIsLarge       :: !Bool      -- ^ Whether this is a large guild - GUILD_CREATE only
+        , guildIsUnavailable :: !Bool      -- ^ Whether this guild is unavailable - GUILD_CREATE only
+        , guildMemberCount   :: !Integer   -- ^ Total number of guild members - GUILD_CREATE only
+        , guildMembers       :: ![Member]  -- ^ The members of the guild - GUILD_CREATE only
+        , guildChannels      :: ![Channel] -- ^ The channels in the guild - GUILD_CREATE only
         } deriving Show
 
   instance FromJSON GuildCreated where

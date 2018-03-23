@@ -7,7 +7,7 @@ module Network.Discord.Types.Events where
 
   import Network.Discord.Types.Channel
   import Network.Discord.Types.Gateway
-  import Network.Discord.Types.Guild (Member, Guild, GuildCreated)
+  import Network.Discord.Types.Guild (Member, MemberChunk, Guild, GuildCreated)
   import Network.Discord.Types.Prelude
 
   -- |Represents data sent on READY event.
@@ -39,7 +39,7 @@ module Network.Discord.Types.Events where
     | GuildMemberAdd          Member
     | GuildMemberRemove       Member
     | GuildMemberUpdate       Member
-    | GuildMemberChunk        Object
+    | GuildMemberChunk        MemberChunk
     | GuildRoleCreate         Object
     | GuildRoleUpdate         Object
     | GuildRoleDelete         Object

@@ -168,7 +168,7 @@ module Network.Discord
 
   instance (DiscordGate m, DiscordRest m) =>  EventMap GuildMemberChunkEvent m where
     type Domain   GuildMemberChunkEvent = Event
-    type Codomain GuildMemberChunkEvent = Object
+    type Codomain GuildMemberChunkEvent = MemberChunk
 
     mapEvent _ (GuildMemberChunk e) = return e
     mapEvent _ _ = mzero
