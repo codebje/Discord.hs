@@ -102,13 +102,13 @@ module Network.Discord.Types.Channel where
                           <*> o .:  "recipients"
                           <*> o .:? "last_message_id" .!= 0
         2 ->
-            Voice <$> o .: "id"
-                  <*> o .: "guild_id"
-                  <*> o .: "name"
-                  <*> o .: "position"
-                  <*> o .: "permission_overwrites"
-                  <*> o .: "bitrate"
-                  <*> o .: "user_limit"
+            Voice <$> o .:  "id"
+                  <*> o .:? "guild_id" .!= 0
+                  <*> o .:  "name"
+                  <*> o .:  "position"
+                  <*> o .:  "permission_overwrites"
+                  <*> o .:  "bitrate"
+                  <*> o .:  "user_limit"
         3 ->
             GroupMessage <$> o .: "id"
         4 ->

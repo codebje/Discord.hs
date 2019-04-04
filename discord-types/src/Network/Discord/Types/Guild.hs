@@ -18,11 +18,12 @@ module Network.Discord.Types.Guild where
         , memberRoles :: ![Snowflake]
         , memberGuild :: Snowflake
         } deriving Show
+
   instance FromJSON Member where
     parseJSON (Object o) =
       GuildMember <$> o .:  "user"
                   <*> o .:? "nick"
-                  <*> o .:  "roles"
+                  <*> o .:? "roles" .!= []
                   <*> o .:? "guild_id" .!= 0
     parseJSON _ = mzero
 
@@ -32,6 +33,7 @@ module Network.Discord.Types.Guild where
         { chunkGuildId      :: {-# UNPACK #-} !Snowflake -- ^ Guild id
         , chunkGuildMembers ::                ![Member]  -- ^ The members of the guild
         } deriving Show
+
   instance FromJSON MemberChunk where
     parseJSON (Object o) =
       MemberChunk <$> o .: "guild_id"
