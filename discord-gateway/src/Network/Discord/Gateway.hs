@@ -66,9 +66,12 @@ module Network.Discord.Gateway where
 
   eventStream :: DiscordGate m => GatewayState -> m () -> m ()
   eventStream Create m = do
-    Hello interval <- step
-    heartbeat interval
-    eventStream Start m
+    payload <- step
+    case payload of
+        Hello interval -> do
+            heartbeat interval
+            eventStream Start m
+        _ -> liftIO $ errorM "Discord-hs.Gateway.Dispatch" "Hello expected"
   eventStream Start m = do
     creds <- auth
     send $ Identify creds False 50 (0, 1)
